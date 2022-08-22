@@ -1,8 +1,8 @@
 import recipes from "./data/recipes.js";
-import getRecipesTemplate from "./utils/getRecipesTemplate.js";
+import getRecipesTemplate from "./view/getRecipesTemplate.js";
+import getBadgesTemplate from "./view/getBadgesTemplate";
+import getFilterListTemplate from "./view/getFilterListTemplate";
 import capitalizeFirstLetter from "./utils/capitalizeFirstLetter";
-import getBadgesTemplate from "./utils/getBadgesTemplate";
-import getFilterListTemplate from "./utils/getFilterListTemplate";
 
 const DOMRecipes = document.querySelector('#recipes')
 const DOMFilterIngredients = document.querySelector('#filter__ingredients')
