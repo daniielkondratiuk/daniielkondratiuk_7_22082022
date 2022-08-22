@@ -1,0 +1,234 @@
+* {
+  font-family: "Lato", sans-serif;
+}
+
+body {
+  background: rgba(122, 122, 122, 0.79) !important;
+}
+
+ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.logo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-top: 42px;
+  padding-bottom: 17px;
+  color: #D04F4F;
+}
+
+.search-panel {
+  background: #E7E7E7;
+  padding: 10px 24px;
+  display: flex;
+  align-items: center;
+  border-radius: 5px;
+  font-size: 18px;
+}
+.search-panel__input {
+  width: 100%;
+  border: none;
+  background: transparent;
+  outline: transparent;
+  font-size: 18px;
+  color: rgba(0, 0, 0, 0.25);
+}
+.search-panel__btn {
+  border: none;
+  outline: transparent;
+  background: transparent;
+  font-size: 24px;
+}
+
+.filters {
+  margin-bottom: 55px;
+  display: flex;
+  gap: 50px;
+}
+
+.filter {
+  position: relative;
+  width: 170px;
+  border-radius: 5px;
+  overflow: hidden;
+  align-self: flex-start;
+}
+.filter__arrow {
+  cursor: pointer;
+  position: absolute;
+  right: 20px;
+  top: 23px;
+  width: 12px;
+  height: 12px;
+  border-left: 2px solid #fff;
+  border-bottom: 2px solid #fff;
+  transform: rotate(-45deg);
+}
+.filter__input {
+  width: 100%;
+  padding: 20px 50px 20px 20px;
+  background: transparent;
+  border: none;
+  outline: transparent;
+  color: #fff;
+}
+.filter__input::placeholder {
+  color: #fff;
+}
+.filter__list {
+  display: none;
+  padding: 0 5px 10px 5px;
+  max-height: 400px;
+  overflow-y: scroll;
+}
+.filter__option-wrap {
+  width: 100%;
+}
+.filter__option {
+  cursor: pointer;
+  width: 100%;
+  display: block;
+  border-radius: 5px;
+  padding: 5px 15px;
+  color: #fff;
+  transition: 0.3s all ease;
+}
+.filter__option:hover {
+  background: white;
+  color: black;
+}
+.filter__option.active {
+  background: white;
+  color: black;
+}
+.filter_blue {
+  background: #3282F7;
+}
+.filter_green {
+  background: #68D9A4;
+}
+.filter_tomato {
+  background: #ED6454;
+}
+
+.filter.open {
+  width: 670px;
+}
+.filter.open .filter__arrow {
+  transform: rotate(135deg);
+  top: 27px;
+}
+.filter.open .filter__input::placeholder {
+  color: rgba(255, 255, 255, 0.25);
+}
+.filter.open .filter__list {
+  display: flex;
+  flex-wrap: wrap;
+}
+.filter.open .filter__option-wrap {
+  width: 33%;
+  padding: 5px;
+}
+.filter.open .filter__option {
+  padding: 10px 15px;
+}
+
+.badges {
+  padding-top: 25px;
+  padding-bottom: 15px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  column-gap: 10px;
+  row-gap: 5px;
+}
+.badges .badge {
+  cursor: pointer;
+}
+.badges > span {
+  cursor: auto;
+  display: flex;
+  align-items: center;
+  color: #fff;
+  transition: 0.3s all ease;
+}
+.badges > span:hover {
+  color: #fff;
+}
+.badges .badge-blue {
+  background: #3282F7;
+}
+.badges .badge-blue:hover {
+  background: #0067ff;
+}
+.badges .badge-green {
+  background: #68D9A4;
+}
+.badges .badge-green:hover {
+  background: #15d57a;
+}
+.badges .badge-tomato {
+  background: #ED6454;
+}
+.badges .badge-tomato:hover {
+  background: #e83621;
+}
+.badges i {
+  font-size: 22px;
+}
+
+.recipes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  column-gap: 20px;
+  row-gap: 50px;
+}
+
+.recipe {
+  width: 380px;
+  background: #E7E7E7;
+  border-radius: 5px;
+  overflow: hidden;
+}
+.recipe__wrap {
+  padding: 0 20px 20px 20px;
+}
+.recipe__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0;
+}
+.recipe__title {
+  font-size: 18px;
+}
+.recipe__duration {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.recipe__duration i {
+  font-size: 20px;
+  color: tomato;
+  background: black;
+  border-radius: 50%;
+}
+.recipe__content {
+  font-size: 12px;
+  display: flex;
+  justify-content: space-between;
+}
+.recipe__description {
+  margin: 0;
+  width: 50%;
+  height: 90px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/*# sourceMappingURL=style.css.map */

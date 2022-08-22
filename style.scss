@@ -1,0 +1,269 @@
+* {
+  font-family: "Lato", sans-serif;
+}
+
+body {
+  background: rgba(122, 122, 122, 0.79) !important;
+}
+
+ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.logo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-top: 42px;
+  padding-bottom: 17px;
+  color: #D04F4F;
+}
+
+.search-panel {
+  background: #E7E7E7;
+  padding: 10px 24px;
+  display: flex;
+  align-items: center;
+  border-radius: 5px;
+  font-size: 18px;
+
+  &__input {
+    width: 100%;
+    border: none;
+    background: transparent;
+    outline: transparent;
+    font-size: 18px;
+    color: rgba(0, 0, 0, 0.25);
+  }
+
+  &__btn {
+    border: none;
+    outline: transparent;
+    background: transparent;
+    font-size: 24px;
+  }
+}
+
+.filters {
+  margin-bottom: 55px;
+  display: flex;
+  gap: 50px;
+}
+
+.filter {
+  position: relative;
+  width: 170px;
+  border-radius: 5px;
+  overflow: hidden;
+  align-self: flex-start;
+
+  &__arrow {
+    cursor: pointer;
+    position: absolute;
+    right: 20px;
+    top: 23px;
+    width: 12px;
+    height: 12px;
+    border-left: 2px solid #fff;
+    border-bottom: 2px solid #fff;
+    transform: rotate(-45deg);
+  }
+
+  &__input {
+    width: 100%;
+    padding: 20px 50px 20px 20px;
+    background: transparent;
+    border: none;
+    outline: transparent;
+    color: #fff;
+
+    &::placeholder {
+      color: #fff;
+    }
+  }
+
+  &__list {
+    display: none;
+    padding: 0 5px 10px 5px;
+    max-height: 400px;
+    overflow-y: scroll;
+  }
+
+  &__option-wrap {
+    width: 100%;
+  }
+
+  &__option {
+    cursor: pointer;
+    width: 100%;
+    display: block;
+    border-radius: 5px;
+    padding: 5px 15px;
+    color: #fff;
+    transition: 0.3s all ease;
+
+    &:hover {
+      background: rgb(255, 255, 255);
+      color: black;
+    }
+  }
+
+  &__option.active {
+    background: rgb(255, 255, 255);
+    color: black;
+  }
+
+  &_blue {
+    background: #3282F7;
+  }
+
+  &_green {
+    background: #68D9A4;
+  }
+
+  &_tomato {
+    background: #ED6454;
+  }
+}
+
+
+.filter.open {
+  width: 670px;
+
+  .filter__arrow {
+    transform: rotate(135deg);
+    top: 27px;
+  }
+
+  .filter__input::placeholder {
+    color: rgba(255, 255, 255, 0.25);
+  }
+
+  .filter__list {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .filter__option-wrap {
+    width: 33%;
+    padding: 5px;
+  }
+
+  .filter__option {
+    padding: 10px 15px;
+  }
+}
+
+
+.badges {
+  padding-top: 25px;
+  padding-bottom: 15px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  column-gap: 10px;
+  row-gap: 5px;
+
+  .badge {
+    cursor: pointer;
+  }
+
+  > span {
+    cursor: auto;
+    display: flex;
+    align-items: center;
+    color: #fff;
+    transition: 0.3s all ease;
+  }
+
+  > span:hover {
+    color: #fff;
+  }
+
+  .badge-blue {
+    background: #3282F7;
+
+    &:hover {
+      background: #0067ff;
+    }
+  }
+
+  .badge-green {
+    background: #68D9A4;
+
+    &:hover {
+      background: #15d57a;
+    }
+  }
+
+  .badge-tomato {
+    background: #ED6454;
+
+    &:hover {
+      background: #e83621;
+    }
+  }
+
+  i {
+    font-size: 22px;
+  }
+}
+
+.recipes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  column-gap: 20px;
+  row-gap: 50px;
+}
+
+.recipe {
+  width: 380px;
+  background: #E7E7E7;
+  border-radius: 5px;
+  overflow: hidden;
+
+  &__wrap {
+    padding: 0 20px 20px 20px;
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0;
+  }
+
+  &__title {
+    font-size: 18px;
+  }
+
+  &__duration {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  &__duration i {
+    font-size: 20px;
+    color: tomato;
+    background: black;
+    border-radius: 50%;
+  }
+
+  &__content {
+    font-size: 12px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__description {
+    margin: 0;
+    width: 50%;
+    height: 90px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
