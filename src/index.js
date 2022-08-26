@@ -2,28 +2,42 @@ import recipes from "./data/recipes.js";
 import getRecipesTemplate from "./view/getRecipesTemplate.js";
 import getBadgesTemplate from "./view/getBadgesTemplate";
 import getFilterListTemplate from "./view/getFilterListTemplate";
-import capitalizeFirstLetter from "./utils/capitalizeFirstLetter";
+import getUniqueValues from "./utils/getUniqueValues";
 
+//Take DOM elements
 const DOMRecipes = document.querySelector('#recipes')
 const DOMFilterIngredients = document.querySelector('#filter__ingredients')
 const DOMFilterAppliance = document.querySelector('#filter__appliances')
 const DOMFilterUtensils = document.querySelector('#filter__utensils')
 const DOMBadges = document.querySelector('#badges')
+const filterInputs = Array.from(document.querySelectorAll('.filter__input'))
+const searchPanel = document.querySelector('#search-panel')
+
 let badges = []
 let searchValue = ''
+const filtersInputValue = {ingredients: '', appliances: '', utensils: ''}
+let submitValueIsEmpty = true
+
 
 render(recipes)
 
 function render(recipesList, badgesList = []) {
     const uniqueValue = getUniqueValues(recipesList)
+    const uniqueValueWithFiltersValue = Object.entries(filtersInputValue).map(([filterType, filterValue]) => {
+        for (const {list, type} of uniqueValue) {
+            if (filterType === type) {
+                return {list: list.filter(e => e.toLowerCase().includes(filterValue.toLowerCase())), type}
+            }
+        }
+    })
     DOMRecipes.innerHTML = getRecipesTemplate(recipesList)
-    uniqueValue.forEach(el => {
+    uniqueValueWithFiltersValue.forEach(el => {
         if (el.type === 'ingredients') DOMFilterIngredients.innerHTML = getFilterListTemplate(el)
-        else if (el.type === 'appliance') DOMFilterAppliance.innerHTML = getFilterListTemplate(el)
+        else if (el.type === 'appliances') DOMFilterAppliance.innerHTML = getFilterListTemplate(el)
         else if (el.type === 'utensils') DOMFilterUtensils.innerHTML = getFilterListTemplate(el)
     })
-    if (badgesList) {
-        DOMBadges.innerHTML = getBadgesTemplate(badgesList)
+    DOMBadges.innerHTML = getBadgesTemplate(badgesList)
+    if(recipesList.length) {
         addActiveClass(badgesList)
     }
 }
@@ -46,17 +60,16 @@ document.addEventListener('click', ({target}) => {
         search(badges)
     }
     if (badgeCloseBtn) {
+        console.log(badges)
         badges = badges.filter(({name}) => name !== badgeCloseBtn.dataset.id)
         search(badges)
     }
-
 })
 
 const search = (badgesList) => {
-    const filteredRecipesBySearch = recipes.filter(recipe => JSON.stringify(recipe).toLowerCase().includes(searchValue))
-    const arr = filteredRecipesBySearch.length ? filteredRecipesBySearch : []
+    const filteredRecipesBySearchInput = recipes.filter(recipe => JSON.stringify(recipe).toLowerCase().includes(searchValue))
     // Filter recipes by badges
-    const filterRecipes = arr.filter(({ingredients, appliance, ustensils}) => {
+    const filterRecipes = filteredRecipesBySearchInput.filter(({ingredients, appliance, ustensils}) => {
         // If badgesList is empty, return all recipes
         if (!badgesList.length) {
             return true
@@ -86,40 +99,37 @@ function toggleFilterLists(btn) {
     })
 }
 
-function getUniqueValues(arr) {
-// Step 1: Get all values from all recipes/appliances/utensils
-// Step 2: Flatten the array of arrays into one array
-// Step 3: Sort alphabetically
-    const listIngredients = arr.map(({ingredients}) => ingredients.map(({ingredient}) => ingredient.toLowerCase())).flat().sort()
-    const listAppliance = arr.map(({appliance}) => appliance.toLowerCase()).sort()
-    const listUtensils = arr.map(({ustensils}) => ustensils.map(utensil => utensil.toLowerCase())).flat().sort()
-// Step 4: Get unique values from and capitalize first letter
-    return [
-        {
-            list: [...new Set(listIngredients)].map(capitalizeFirstLetter),
-            type: 'ingredients'
-        },
-        {
-            list: [...new Set(listAppliance)].map(capitalizeFirstLetter),
-            type: 'appliance'
-        },
-        {
-            list: [...new Set(listUtensils)].map(capitalizeFirstLetter),
-            type: 'utensils'
-        }
-    ]
-}
-
 function addActiveClass(badgesList) {
     badgesList.forEach(({type, name}) => {
         document.querySelector(`[data-type="${type}"][data-id="${name}"]`).classList.add('active')
     })
 }
 
-const searchPanel = document.getElementById('search-panel')
 searchPanel.addEventListener('submit', (event) => {
     event.preventDefault()
     // Get search value without spaces and lowercase
     searchValue = Object.fromEntries(new FormData(event.target)).search.trim().toLowerCase()
-    if (searchValue) search(badges)
+    if (searchValue) {
+        search(badges)
+        submitValueIsEmpty = false
+    } else if (!submitValueIsEmpty && !searchValue) {
+        search(badges)
+        submitValueIsEmpty = true
+    }
+})
+
+filterInputs.forEach(input => {
+    input.addEventListener('input', ({target}) => {
+        const filterList = document.querySelector(`#filter__${target.dataset.name}`)
+        const filterListIsOpen = target.parentElement.classList.contains('open')
+        if (target.value && filterListIsOpen) {
+            console.log(target.parentElement, 'if else')
+        } else if (target.value) {
+            filterList.setAttribute('style', `display: flex;flex-direction: column;row-gap: 5px;`)
+        } else {
+            filterList.setAttribute('style', '')
+        }
+        filtersInputValue[target.dataset.name] = target.value
+        search(badges)
+    })
 })

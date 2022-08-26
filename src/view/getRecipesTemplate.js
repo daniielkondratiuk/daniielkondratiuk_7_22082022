@@ -11,7 +11,7 @@ export default function getRecipesTemplate(recipes) {
         `).join('')
         return `
         <div class="recipe">
-            <img class="recipe__img" src="https://picsum.photos/380/178" alt="recipe">
+            <img class="recipe__img" src="https://via.placeholder.com/380x178" alt="recipe">
             <div class="recipe__wrap">
                 <div class="recipe__header">
                     <h2 class="recipe__title">${name}</h2>

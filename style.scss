@@ -47,7 +47,8 @@ ul {
 }
 
 .filters {
-  margin-bottom: 55px;
+  position: absolute;
+  z-index: 1;
   display: flex;
   gap: 50px;
 }
@@ -58,6 +59,7 @@ ul {
   border-radius: 5px;
   overflow: hidden;
   align-self: flex-start;
+  transition: 0.3s all ease;
 
   &__arrow {
     cursor: pointer;
@@ -213,6 +215,7 @@ ul {
 
 .recipes {
   display: flex;
+  margin-top: 100px;
   flex-wrap: wrap;
   justify-content: space-between;
   column-gap: 20px;
