@@ -3,7 +3,7 @@ export default function getBadgesTemplate(badges) {
         let color = ''
         if (type === 'ingredients') {
             color = 'blue'
-        }else if (type === 'appliance') {
+        }else if (type === 'appliances') {
             color = 'green'
         }else if (type === 'utensils') {
             color = 'tomato'

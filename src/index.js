@@ -37,7 +37,7 @@ function render(recipesList, badgesList = []) {
         else if (el.type === 'utensils') DOMFilterUtensils.innerHTML = getFilterListTemplate(el)
     })
     DOMBadges.innerHTML = getBadgesTemplate(badgesList)
-    if(recipesList.length) {
+    if (recipesList.length) {
         addActiveClass(badgesList)
     }
 }
@@ -78,7 +78,7 @@ const search = (badgesList) => {
         return badgesList.every(({name, type}) => {
             if (type === 'ingredients') {
                 return ingredients.some(({ingredient}) => ingredient.toLowerCase() === name.toLowerCase())
-            } else if (type === 'appliance') {
+            } else if (type === 'appliances') {
                 return appliance.toLowerCase() === name.toLowerCase()
             } else if (type === 'utensils') {
                 return ustensils.some((utensil) => utensil.toLowerCase() === name.toLowerCase())
