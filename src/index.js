@@ -37,7 +37,7 @@ function render(recipesList, badgesList = []) {
         else if (el.type === 'utensils') DOMFilterUtensils.innerHTML = getFilterListTemplate(el)
     })
     DOMBadges.innerHTML = getBadgesTemplate(badgesList)
-    if(recipesList.length) {
+    if (recipesList.length) {
         addActiveClass(badgesList)
     }
 }
@@ -57,35 +57,84 @@ document.addEventListener('click', ({target}) => {
         } else {
             badges = badges.filter(({name}) => name !== target.innerText)
         }
-        search(badges)
+        searchWithCycles(badges)
     }
     if (badgeCloseBtn) {
-        console.log(badges)
         badges = badges.filter(({name}) => name !== badgeCloseBtn.dataset.id)
-        search(badges)
+        searchWithCycles(badges)
     }
 })
 
-const search = (badgesList) => {
-    const filteredRecipesBySearchInput = recipes.filter(recipe => JSON.stringify(recipe).toLowerCase().includes(searchValue))
-    // Filter recipes by badges
-    const filterRecipes = filteredRecipesBySearchInput.filter(({ingredients, appliance, ustensils}) => {
-        // If badgesList is empty, return all recipes
-        if (!badgesList.length) {
-            return true
+const searchWithCycles = (badgesList) => {
+    console.time('searchWithCycles')
+    const filteredRecipesBySearchInput = []
+    const filterRecipes = []
+    let flag = false
+    for (let i = 0; i < recipes.length; i++) {
+        const regex = new RegExp(searchValue, "g");
+        if (JSON.stringify(recipes[i]).toLowerCase().match(regex)) {
+            filteredRecipesBySearchInput.push(recipes[i])
         }
-        // If any of the badges match any of the recipes, return true
-        return badgesList.every(({name, type}) => {
-            if (type === 'ingredients') {
-                return ingredients.some(({ingredient}) => ingredient.toLowerCase() === name.toLowerCase())
-            } else if (type === 'appliance') {
-                return appliance.toLowerCase() === name.toLowerCase()
-            } else if (type === 'utensils') {
-                return ustensils.some((utensil) => utensil.toLowerCase() === name.toLowerCase())
+    }
+    if (badgesList.length){
+        for (let i = 0; i < badgesList.length; i++) {
+            const {name, type} = badgesList[i]
+            for (let j = 0; j < filteredRecipesBySearchInput.length; j++) {
+                flag = someElementHasValue(name, type, filteredRecipesBySearchInput[j])
+                if (flag) {
+                    filterRecipes.push(filteredRecipesBySearchInput[j])
+                }
             }
-        })
-    })
-    render(filterRecipes, badgesList)
+        }
+    }else {
+        filterRecipes.push(...filteredRecipesBySearchInput)
+    }
+    console.timeEnd('searchWithCycles')
+    if (badgesList.length < 2) {
+        render(filterRecipes, badgesList)
+    } else {
+        render(getDuplicateElements(filterRecipes), badgesList)
+    }
+}
+
+function someElementHasValue(name, type, element) {
+    let flag = false
+    const {ingredients, appliance, ustensils} = element
+    if (type === 'ingredients') {
+        for (let i = 0; i < ingredients.length; i++) {
+            let condition = ingredients[i].ingredient.toLowerCase() === name.toLowerCase()
+            if (condition) {
+                flag = true
+                break
+            }
+        }
+    } else if (type === 'appliances') {
+        if (appliance === name) {
+            flag = true
+        }
+    } else if (type === 'utensils') {
+        for (let i = 0; i < ustensils.length; i++) {
+            let condition = ustensils[i].toLowerCase() === name.toLowerCase()
+            if (condition) {
+                flag = true
+                break
+            }
+        }
+    }
+    return flag
+}
+
+function getDuplicateElements(array) {
+    const result = []
+    for (let i = 0; i <= array.length; i++) {
+        for (let j = 0; j <= array.length; j++) {
+            if (i !== j && array[i] === array[j] && result.indexOf(array[i]) === -1) {
+                result.push(array[i]);
+                break;
+            }
+        }
+    }
+    return result
 }
 
 function toggleFilterLists(btn) {
@@ -110,10 +159,10 @@ searchPanel.addEventListener('submit', (event) => {
     // Get search value without spaces and lowercase
     searchValue = Object.fromEntries(new FormData(event.target)).search.trim().toLowerCase()
     if (searchValue) {
-        search(badges)
+        searchWithCycles(badges)
         submitValueIsEmpty = false
     } else if (!submitValueIsEmpty && !searchValue) {
-        search(badges)
+        searchWithCycles(badges)
         submitValueIsEmpty = true
     }
 })
@@ -130,6 +179,6 @@ filterInputs.forEach(input => {
             filterList.setAttribute('style', '')
         }
         filtersInputValue[target.dataset.name] = target.value
-        search(badges)
+        searchWithCycles(badges)
     })
 })
