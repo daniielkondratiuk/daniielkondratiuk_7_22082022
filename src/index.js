@@ -18,18 +18,12 @@ let searchValue = ''
 const filtersInputValue = {ingredients: '', appliances: '', utensils: ''}
 let submitValueIsEmpty = true
 
-
+//Initial rendering
 render(recipes)
 
 function render(recipesList, badgesList = []) {
-    const uniqueValue = getUniqueValues(recipesList)
-    const uniqueValueWithFiltersValue = Object.entries(filtersInputValue).map(([filterType, filterValue]) => {
-        for (const {list, type} of uniqueValue) {
-            if (filterType === type) {
-                return {list: list.filter(e => e.toLowerCase().includes(filterValue.toLowerCase())), type}
-            }
-        }
-    })
+    changeNoResultDisplay(recipesList.length)
+    const uniqueValueWithFiltersValue = getUniqueValues(recipesList, filtersInputValue)
     DOMRecipes.innerHTML = getRecipesTemplate(recipesList)
     uniqueValueWithFiltersValue.forEach(el => {
         if (el.type === 'ingredients') DOMFilterIngredients.innerHTML = getFilterListTemplate(el)
@@ -51,6 +45,7 @@ document.addEventListener('click', ({target}) => {
         toggleFilterLists(target)
     }
     if (filterOption) {
+        clearInputAndRemoveAttr(filterOption.dataset.type)
         const badgeExist = badges.some(({name}) => name === target.innerText)
         if (!badgeExist) {
             badges.push({type: target.dataset.type, name: target.innerText})
@@ -65,6 +60,7 @@ document.addEventListener('click', ({target}) => {
     }
 })
 
+
 const searchWithCycles = (badgesList) => {
     console.time('searchWithCycles')
     const filteredRecipesBySearchInput = []
@@ -72,7 +68,8 @@ const searchWithCycles = (badgesList) => {
     let flag = false
     for (let i = 0; i < recipes.length; i++) {
         const regex = new RegExp(searchValue, "g");
-        if (JSON.stringify(recipes[i]).toLowerCase().match(regex)) {
+        const {name,ingredients,description} = recipes[i]
+        if (JSON.stringify({name,ingredients,description}).toLowerCase().match(regex)) {
             filteredRecipesBySearchInput.push(recipes[i])
         }
     }
@@ -150,15 +147,30 @@ function toggleFilterLists(btn) {
 
 function addActiveClass(badgesList) {
     badgesList.forEach(({type, name}) => {
-        document.querySelector(`[data-type="${type}"][data-id="${name}"]`).classList.add('active')
+        document.querySelector(`[data-type="${type}"][data-id="${name}"]`)?.classList.add('active')
     })
+}
+
+function clearInputAndRemoveAttr(type) {
+    document.querySelector(`input[data-name="${type}"]`).value = ''
+    document.querySelector(`#filter__${type}`).removeAttribute('style')
+    filtersInputValue[type] = ''
+}
+
+function changeNoResultDisplay(condition) {
+    const noResult = document.querySelector('.no-result')
+    if (condition) {
+        noResult.style.display = 'none'
+    } else {
+        noResult.style.display = 'block'
+    }
 }
 
 searchPanel.addEventListener('submit', (event) => {
     event.preventDefault()
     // Get search value without spaces and lowercase
     searchValue = Object.fromEntries(new FormData(event.target)).search.trim().toLowerCase()
-    if (searchValue) {
+    if (searchValue.length > 2) {
         searchWithCycles(badges)
         submitValueIsEmpty = false
     } else if (!submitValueIsEmpty && !searchValue) {
@@ -166,17 +178,14 @@ searchPanel.addEventListener('submit', (event) => {
         submitValueIsEmpty = true
     }
 })
-
 filterInputs.forEach(input => {
     input.addEventListener('input', ({target}) => {
         const filterList = document.querySelector(`#filter__${target.dataset.name}`)
         const filterListIsOpen = target.parentElement.classList.contains('open')
-        if (target.value && filterListIsOpen) {
-            console.log(target.parentElement, 'if else')
-        } else if (target.value) {
+        if (target.value && !filterListIsOpen) {
             filterList.setAttribute('style', `display: flex;flex-direction: column;row-gap: 5px;`)
         } else {
-            filterList.setAttribute('style', '')
+            filterList.removeAttribute('style')
         }
         filtersInputValue[target.dataset.name] = target.value
         searchWithCycles(badges)

@@ -2,15 +2,20 @@
   "name": "OC_daniielkondratiuk_projet_7",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "source": "src/index.js",
   "scripts": {
     "style": "sass --watch style.scss style.css",
-    "serve": "npx parcel index.html"
+    "serve": "parcel index.html",
+    "build": "parcel build index.html",
+    "deploy": "gh-pages -d dist"
   },
+  "homepage": "https://daniielkondratiuk.github.io/daniielkondratiuk_7_22082022/",
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@parcel/transformer-sass": "^2.7.0",
+    "gh-pages": "^4.0.0",
     "parcel": "^2.7.0"
-  }
+  },
+  "dependencies": {}
 }
