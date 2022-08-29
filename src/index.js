@@ -60,7 +60,6 @@ document.addEventListener('click', ({target}) => {
     }
 })
 
-
 const searchWithCycles = (badgesList) => {
     console.time('searchWithCycles')
     const filteredRecipesBySearchInput = []
